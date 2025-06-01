@@ -4,6 +4,7 @@ export const getCharacters = async (dispatch) => {
     if (data) {
         const results = await loadAllCharactersDetails(data.results)
         dispatch({ type: "set_characters", payload: results })
+        localStorage.setItem("characters", JSON.stringify(results))
     }
 
 }
@@ -11,18 +12,21 @@ export const getCharacters = async (dispatch) => {
 export const getPlanets = async (dispatch) => {
     const response = await fetch("https://www.swapi.tech/api/planets/")
     const data = await response.json()
-        if (data) {
+    if (data) {
         const results = await loadAllPlanetsDetails(data.results)
         dispatch({ type: "set_planets", payload: results })
+        localStorage.setItem("planets", JSON.stringify(results))
+
     }
 }
 
 export const getVehicles = async (dispatch) => {
     const response = await fetch("https://www.swapi.tech/api/vehicles/")
     const data = await response.json()
-        if (data) {
+    if (data) {
         const results = await loadAllVehiclesDetails(data.results)
         dispatch({ type: "set_vehicles", payload: results })
+        localStorage.setItem("vehicles", JSON.stringify(results))
     }
 }
 
@@ -49,9 +53,9 @@ const loadAllCharactersDetails = async (characters) => {
     }
 }
 
-const loadAllPlanetsDetails = async (planets) => {   
+const loadAllPlanetsDetails = async (planets) => {
     try {
-        const promises = planets.map( async (planet) => {
+        const promises = planets.map(async (planet) => {
             try {
                 const response = await fetch(`https://www.swapi.tech/api/planets/${planet.uid}`)
                 const data = await response.json()
@@ -61,20 +65,20 @@ const loadAllPlanetsDetails = async (planets) => {
                 }
             } catch (error) {
                 console.log(error);
-                
+
             }
         })
         const results = await Promise.all(promises)
         return results
     } catch (error) {
         console.log(error);
-        
+
     }
 }
 
-const loadAllVehiclesDetails = async (vehicles) => {   
+const loadAllVehiclesDetails = async (vehicles) => {
     try {
-        const promises = vehicles.map( async (vehicle) => {
+        const promises = vehicles.map(async (vehicle) => {
             try {
                 const response = await fetch(`https://www.swapi.tech/api/vehicles/${vehicle.uid}`)
                 const data = await response.json()
@@ -84,13 +88,13 @@ const loadAllVehiclesDetails = async (vehicles) => {
                 }
             } catch (error) {
                 console.log(error);
-                
+
             }
         })
         const results = await Promise.all(promises)
         return results
     } catch (error) {
         console.log(error);
-        
+
     }
 }
